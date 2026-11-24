@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Gearhead Auto Hub</title>
+    <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-surface-alt: #f8fafc;
+            --border-color: #e2e8f0;
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --accent-blue: #0284c7;
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --container-max: 1140px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .app-header {
+            background-color: var(--bg-surface);
+            border-bottom: 3px solid var(--primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            width: 64px;
+            height: 64px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-surface-alt);
+            padding: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .brand {
+            text-align: left;
+        }
+
+        .brand h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .brand h1::before {
+            content: "⚙ ";
+            color: var(--primary);
+        }
+
+        .brand p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .card h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            border-left: 4px solid var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box {
+            background-color: var(--bg-surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+        }
+
+        .info-box h3 {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 0.35rem;
+        }
+
+        .info-box p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.7rem 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .confirm-msg {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-sm);
+            background-color: #dcfce7;
+            color: #15803d;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+            .brand {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-container">
+            <div class="header-top">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Gearhead Auto Hub Logo">
+                </div>
+                <div class="brand">
+                    <h1>Gearhead Auto Hub</h1>
+                    <p>Service Management & Repair Tracker</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="product.html" class="nav-link">Products</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="currentRepair.html" class="nav-link">Current Repair Requests & Services</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <section class="card">
+            <h2>Contact Gearhead Auto Hub</h2>
+            <p class="section-desc">Reach out for service inquiries, parts availability, or appointment scheduling.</p>
+
+            <div class="contact-grid">
+                <div class="info-box">
+                    <h3>Workshop Location</h3>
+                    <p>Baguio City, Cordillera Administrative Region, Philippines</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Shop Hours</h3>
+                    <p>Monday – Saturday: 8:00 AM – 6:00 PM<br>Sunday: Closed</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Direct Contact</h3>
+                    <p>Phone: (074) 442-0190 / +63 917 555 0190<br>Email: support@gearheadautohub.ph</p>
+                </div>
+            </div>
+
+            <h2>Send an Inquiry</h2>
+            <p class="section-desc">Have a question about a repair, diagnostic scan, or spare part? Leave a message below.</p>
+
+            <form id="contactForm">
+                <div class="form-grid">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="senderName">Your Name</label>
+                        <input type="text" id="senderName" placeholder="e.g. Carlo Mendoza" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="senderContact">Phone or Email</label>
+                        <input type="text" id="senderContact" placeholder="e.g. 09171234567 or carlo@email.com" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="inquiryTopic">Topic</label>
+                        <select id="inquiryTopic" required>
+                            <option value="" disabled selected>Choose a topic...</option>
+                            <option value="Repair & Diagnostics">Repair & Diagnostics</option>
+                            <option value="Parts & Oil Inquiry">Parts & Oil Inquiry</option>
+                            <option value="Service Estimate">Service Estimate</option>
+                            <option value="General Feedback">General Feedback</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="messageBody">Message & Vehicle Details</label>
+                    <textarea id="messageBody" placeholder="Tell us your vehicle model/year and how we can help..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Inquiry</button>
+                <div id="confirmMsg" class="confirm-msg"></div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('senderName').value.trim();
+            const topic = document.getElementById('inquiryTopic').value;
+            const confirmEl = document.getElementById('confirmMsg');
+
+            confirmEl.textContent = `Thank you, ${name}! Your "${topic}" inquiry has been recorded for our service desk.`;
+            confirmEl.style.display = 'block';
+            this.reset();
+        });
+    </script>
+</body>
+</html>

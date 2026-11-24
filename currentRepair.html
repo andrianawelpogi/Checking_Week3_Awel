@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Repair Requests - Gearhead Auto Hub</title>
+    <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-surface-alt: #f8fafc;
+            --border-color: #e2e8f0;
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --accent-blue: #0284c7;
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --status-queue-bg: #fef3c7;
+            --status-queue-text: #b45309;
+            --status-service-bg: #e0f2fe;
+            --status-service-text: #0369a1;
+            --status-done-bg: #dcfce7;
+            --status-done-text: #15803d;
+            --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Consolas', 'Courier New', monospace;
+            --container-max: 1220px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .app-header {
+            background-color: var(--bg-surface);
+            border-bottom: 3px solid var(--primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            width: 64px;
+            height: 64px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-surface-alt);
+            padding: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .brand {
+            text-align: left;
+        }
+
+        .brand h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .brand h1::before {
+            content: "⚙ ";
+            color: var(--primary);
+        }
+
+        .brand p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .card h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            border-left: 4px solid var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tv-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background-color: var(--bg-surface-alt);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+        }
+
+        .btn-tv {
+            background-color: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.6rem 1.15rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            transition: var(--transition);
+        }
+
+        .btn-tv:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.7rem 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card {
+            background-color: var(--bg-surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-card .label {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card .amount {
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-top: 0.25rem;
+        }
+
+        .amount.queuing { color: var(--status-queue-text); }
+        .amount.servicing { color: var(--status-service-text); }
+        .amount.done { color: var(--status-done-text); }
+
+        .repair-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .repair-table th {
+            background-color: var(--bg-surface-alt);
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.76rem;
+            letter-spacing: 0.5px;
+            padding: 0.85rem 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .repair-table td {
+            padding: 0.85rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        .repair-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .queue-num {
+            font-family: var(--font-mono);
+            background-color: #e2e8f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: inline-block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-queueing {
+            background-color: var(--status-queue-bg);
+            color: var(--status-queue-text);
+        }
+
+        .status-on-service {
+            background-color: var(--status-service-bg);
+            color: var(--status-service-text);
+        }
+
+        .status-done {
+            background-color: var(--status-done-bg);
+            color: var(--status-done-text);
+        }
+
+        .job-notes-input {
+            width: 100%;
+            min-width: 160px;
+            padding: 0.4rem 0.55rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-family: var(--font-sans);
+            margin-bottom: 0.4rem;
+        }
+
+        .extra-cost-row {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .extra-cost-input {
+            width: 80px;
+            padding: 0.3rem 0.45rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-family: var(--font-mono);
+        }
+
+        .cost-breakdown {
+            font-family: var(--font-mono);
+            font-size: 0.84rem;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        .cost-total {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .action-btn-group {
+            display: flex;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-status {
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            color: var(--text-main);
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-in-service:hover {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+        }
+
+        .btn-done:hover {
+            background-color: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+        }
+
+        .btn-queueing:hover {
+            background-color: #d97706;
+            color: #ffffff;
+            border-color: #d97706;
+        }
+
+        @media (max-width: 900px) {
+            .repair-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+            .brand {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-container">
+            <div class="header-top">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Gearhead Auto Hub Logo">
+                </div>
+                <div class="brand">
+                    <h1>Gearhead Auto Hub</h1>
+                    <p>Service Management & Repair Tracker</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="product.html" class="nav-link">Products</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="currentRepair.html" class="nav-link active">Current Repair Requests & Services</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <div class="tv-bar">
+            <div>
+                <strong>Customer TV Queue Display</strong>
+                <div style="font-size: 0.88rem; color: var(--text-muted);">Open <code>track.html</code> on your customer TV or lobby monitor to show live queue updates.</div>
+            </div>
+            <a href="track.html" target="_blank" class="btn-tv">Open TV Display ↗</a>
+        </div>
+
+        <section class="card form-card">
+            <h2>Register Vehicle & Job Order</h2>
+            <p class="section-desc">Submit ticket details and select a service to add the vehicle to the live workshop queue.</p>
+            
+            <form id="queueForm" class="queue-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="queueNumber">Ticket / Queue Number</label>
+                        <input type="text" id="queueNumber" placeholder="e.g. 101" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerName">Customer Name & Vehicle</label>
+                        <input type="text" id="customerName" placeholder="e.g. Juan Dela Cruz - NMAX 155" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceType">Requested Service</label>
+                        <select id="serviceType" required>
+                            <option value="" disabled selected>Select a service...</option>
+                            <option value="CVT & Drivetrain Tuning" data-price="500">CVT & Drivetrain Tuning (₱500.00)</option>
+                            <option value="Computerized Scanner Diagnostic" data-price="350">Computerized Scanner Diagnostic (₱350.00)</option>
+                            <option value="Brake System Overhaul" data-price="600">Brake System Overhaul (₱600.00)</option>
+                            <option value="Full Synthetic Oil Change & Preventive Maintenance" data-price="300">Full Synthetic Oil Change & Preventive Maintenance (₱300.00)</option>
+                            <option value="Suspension Fork Rebuilding & Sealing" data-price="750">Suspension Fork Rebuilding & Sealing (₱750.00)</option>
+                            <option value="Fuel Injector Ultrasonic Cleaning" data-price="400">Fuel Injector Ultrasonic Cleaning (₱400.00)</option>
+                            <option value="Electrical System & Alternator Diagnostics" data-price="350">Electrical System & Alternator Diagnostics (₱350.00)</option>
+                            <option value="Cooling System Flush & Thermostat Check" data-price="450">Cooling System Flush & Thermostat Check (₱450.00)</option>
+                            <option value="Wheel Alignment & Dynamic Balancing" data-price="400">Wheel Alignment & Dynamic Balancing (₱400.00)</option>
+                            <option value="Valve Clearance Adjustment & Tune-Up" data-price="550">Valve Clearance Adjustment & Tune-Up (₱550.00)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="initialNotes">Mechanic Notes / Concern (Optional)</label>
+                        <input type="text" id="initialNotes" placeholder="e.g. Slight vibration at 40 km/h">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Join Repair Queue</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Current Repair Requests & Queue Status</h2>
+            <p class="section-desc">Track real-time queue positions, add mechanic notes or extra parts cost, and update service statuses.</p>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <span class="label">Still Queueing</span>
+                    <span id="queuingCount" class="amount queuing">0 Waiting</span>
+                </div>
+                <div class="summary-card">
+                    <span class="label">On Service</span>
+                    <span id="servicingCount" class="amount servicing">0 Active</span>
+                </div>
+                <div class="summary-card">
+                    <span class="label">Total Completed</span>
+                    <span id="doneCount" class="amount done">0 Completed</span>
+                </div>
+            </div>
+
+            <table class="repair-table">
+                <thead>
+                    <tr>
+                        <th>Ticket / Queue</th>
+                        <th>Customer & Vehicle</th>
+                        <th>Service, Notes & Parts</th>
+                        <th>Cost Breakdown</th>
+                        <th>Status</th>
+                        <th>Action Controls</th>
+                    </tr>
+                </thead>
+                <tbody id="repairTableBody">
+                    <tr id="emptyActivePlaceholder">
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No active vehicles in queue yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card log-card">
+            <h2>Completed Customers Log</h2>
+            <p class="section-desc">Historical archive of finished service records transferred automatically from the active queue.</p>
+            
+            <table class="repair-table log-table">
+                <thead>
+                    <tr>
+                        <th>Ticket / Queue</th>
+                        <th>Customer & Vehicle</th>
+                        <th>Completed Service & Notes</th>
+                        <th>Final Total</th>
+                        <th>Time Finished</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="logTableBody">
+                    <tr id="emptyLogPlaceholder">
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No completed customer records in log yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        let autoQueueCounter = 1;
+        let activeQueue = [];
+        let completedLog = [];
+        const channel = ('BroadcastChannel' in window) ? new BroadcastChannel('gearhead_queue_channel') : null;
+
+        function formatPeso(amount) {
+            return '₱' + Number(amount || 0).toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function saveState() {
+            const payload = {
+                activeQueue,
+                completedLog,
+                autoQueueCounter
+            };
+            localStorage.setItem('gearhead_active_queue', JSON.stringify(activeQueue));
+            localStorage.setItem('gearhead_completed_log', JSON.stringify(completedLog));
+            localStorage.setItem('gearhead_queue_counter', String(autoQueueCounter));
+            if (channel) {
+                channel.postMessage(payload);
+            }
+        }
+
+        function loadState() {
+            const savedActive = localStorage.getItem('gearhead_active_queue');
+            const savedCompleted = localStorage.getItem('gearhead_completed_log');
+            const savedCounter = localStorage.getItem('gearhead_queue_counter');
+
+            if (savedActive) activeQueue = JSON.parse(savedActive);
+            if (savedCompleted) completedLog = JSON.parse(savedCompleted);
+            if (savedCounter) autoQueueCounter = parseInt(savedCounter, 10) || 1;
+
+            renderTables();
+        }
+
+        function updateJobNotes(index, value) {
+            if (!activeQueue[index]) return;
+            activeQueue[index].notes = value.trim();
+            saveState();
+        }
+
+        function updateExtraCost(index, value) {
+            if (!activeQueue[index]) return;
+            const parsed = parseFloat(value);
+            activeQueue[index].extraCost = isNaN(parsed) || parsed < 0 ? 0 : parsed;
+            saveState();
+            renderTables();
+        }
+
+        function renderTables() {
+            const repairTableBody = document.getElementById('repairTableBody');
+            const logTableBody = document.getElementById('logTableBody');
+
+            repairTableBody.innerHTML = '';
+            logTableBody.innerHTML = '';
+
+            let queuingCount = 0;
+            let servicingCount = 0;
+
+            if (activeQueue.length === 0) {
+                repairTableBody.innerHTML = `
+                    <tr id="emptyActivePlaceholder">
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No active vehicles in queue yet.</td>
+                    </tr>
+                `;
+            } else {
+                activeQueue.forEach((item, index) => {
+                    if (item.status === 'servicing') servicingCount++;
+                    else queuingCount++;
+
+                    const badgeClass = item.status === 'servicing' ? 'status-on-service' : 'status-queueing';
+                    const badgeText = item.status === 'servicing' ? 'On Service' : 'Still Queueing';
+
+                    const basePrice = Number(item.basePrice) || 0;
+                    const extraCost = Number(item.extraCost) || 0;
+                    const totalCost = basePrice + extraCost;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <span class="queue-num">${item.queue}</span><br>
+                            <small style="color: var(--text-muted); font-weight: 700;">${item.ticketID}</small>
+                        </td>
+                        <td><strong>${item.customer}</strong></td>
+                        <td>
+                            <div style="font-weight: 600; margin-bottom: 0.35rem;">${item.service}</div>
+                            <input type="text" class="job-notes-input" placeholder="Add mechanic findings/notes..." 
+                                   value="${(item.notes || '').replace(/"/g, '&quot;')}" 
+                                   onchange="updateJobNotes(${index}, this.value)">
+                            <div class="extra-cost-row">
+                                <span>Extra Parts (₱):</span>
+                                <input type="number" min="0" step="10" class="extra-cost-input" 
+                                       value="${extraCost}" 
+                                       onchange="updateExtraCost(${index}, this.value)">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cost-breakdown">
+                                <div>Base: ${formatPeso(basePrice)}</div>
+                                <div>Parts: ${formatPeso(extraCost)}</div>
+                                <div class="cost-total">Total: ${formatPeso(totalCost)}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge ${badgeClass}">${badgeText}</span><br>
+                            <small style="color: var(--text-muted);">${item.mechanic}</small>
+                        </td>
+                        <td>
+                            <div class="action-btn-group">
+                                <button type="button" class="btn-status btn-in-service" onclick="updateStatus(${index}, 'servicing')">In Service</button>
+                                <button type="button" class="btn-status btn-done" onclick="moveToLog(${index})">Done</button>
+                                <button type="button" class="btn-status btn-queueing" onclick="updateStatus(${index}, 'queueing')">Queueing</button>
+                            </div>
+                        </td>
+                    `;
+                    repairTableBody.appendChild(tr);
+                });
+            }
+
+            if (completedLog.length === 0) {
+                logTableBody.innerHTML = `
+                    <tr id="emptyLogPlaceholder">
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No completed customer records in log yet.</td>
+                    </tr>
+                `;
+            } else {
+                completedLog.forEach(item => {
+                    const basePrice = Number(item.basePrice) || 0;
+                    const extraCost = Number(item.extraCost) || 0;
+                    const totalCost = basePrice + extraCost;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <span class="queue-num">${item.queue}</span><br>
+                            <small style="color: var(--text-muted); font-weight: 700;">${item.ticketID}</small>
+                        </td>
+                        <td><strong>${item.customer}</strong></td>
+                        <td>
+                            <div style="font-weight: 600;">${item.service}</div>
+                            ${item.notes ? `<small style="color: var(--text-secondary);">Notes: ${item.notes}</small>` : ''}
+                        </td>
+                        <td>
+                            <div class="cost-breakdown">
+                                <div class="cost-total">${formatPeso(totalCost)}</div>
+                                <small style="color: var(--text-muted);">(${formatPeso(basePrice)} + ${formatPeso(extraCost)})</small>
+                            </div>
+                        </td>
+                        <td><small>${item.timeFinished}</small></td>
+                        <td><span class="badge status-done">Finished - Proceed to Cashier</span></td>
+                    `;
+                    logTableBody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('queuingCount').textContent = `${queuingCount} Waiting`;
+            document.getElementById('servicingCount').textContent = `${servicingCount} Active`;
+            document.getElementById('doneCount').textContent = `${completedLog.length} Completed`;
+        }
+
+        document.getElementById('queueForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const ticketInput = document.getElementById('queueNumber').value.trim();
+            const customerInput = document.getElementById('customerName').value.trim();
+            const serviceSelect = document.getElementById('serviceType');
+            const serviceInput = serviceSelect.value;
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            const basePrice = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) || 0 : 0;
+            const notesInput = document.getElementById('initialNotes').value.trim();
+
+            if (!ticketInput || !customerInput || !serviceInput) return;
+
+            const ticketID = ticketInput.startsWith('#') ? ticketInput : '#' + ticketInput;
+            const queueNum = 'Q-' + String(autoQueueCounter).padStart(2, '0');
+            autoQueueCounter++;
+
+            activeQueue.push({
+                ticketID: ticketID,
+                queue: queueNum,
+                customer: customerInput,
+                service: serviceInput,
+                basePrice: basePrice,
+                extraCost: 0,
+                notes: notesInput,
+                mechanic: 'Unassigned',
+                status: 'queueing',
+                statusText: 'Still Queueing'
+            });
+
+            saveState();
+            renderTables();
+            document.getElementById('queueForm').reset();
+        });
+
+        function updateStatus(index, newStatus) {
+            const item = activeQueue[index];
+            if (!item || item.status === newStatus) return;
+
+            item.status = newStatus;
+            if (newStatus === 'servicing') {
+                item.statusText = 'On Service';
+                if (item.mechanic === 'Unassigned') {
+                    item.mechanic = 'Assigned Mechanic';
+                }
+            } else {
+                item.statusText = 'Still Queueing';
+            }
+
+            saveState();
+            renderTables();
+        }
+
+        function moveToLog(index) {
+            const item = activeQueue[index];
+            if (!item) return;
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            completedLog.unshift({
+                ticketID: item.ticketID,
+                queue: item.queue,
+                customer: item.customer,
+                service: item.service,
+                basePrice: Number(item.basePrice) || 0,
+                extraCost: Number(item.extraCost) || 0,
+                notes: item.notes || '',
+                timeFinished: timeString,
+                statusText: 'Finished - Proceed to Cashier'
+            });
+
+            activeQueue.splice(index, 1);
+            saveState();
+            renderTables();
+        }
+
+        loadState();
+    </script>
+</body>
+</html>

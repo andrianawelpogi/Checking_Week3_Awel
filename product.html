@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Gearhead Auto Hub</title>
+    <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-surface-alt: #f8fafc;
+            --border-color: #e2e8f0;
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --accent-blue: #0284c7;
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Consolas', 'Courier New', monospace;
+            --container-max: 1140px;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .app-header {
+            background-color: var(--bg-surface);
+            border-bottom: 3px solid var(--primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            width: 64px;
+            height: 64px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-surface-alt);
+            padding: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .brand {
+            text-align: left;
+        }
+
+        .brand h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .brand h1::before {
+            content: "⚙ ";
+            color: var(--primary);
+        }
+
+        .brand p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .card h2 {
+            font-size: 1.45rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            border-left: 4px solid var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: var(--bg-surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-card);
+        }
+
+        .product-img-slot {
+            width: 100%;
+            height: 180px;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            overflow: hidden;
+        }
+
+        .product-img-slot img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .product-info {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .category-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            background-color: #e0f2fe;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.6rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.12rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .price-tag {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+            .brand {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-container">
+            <div class="header-top">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Gearhead Auto Hub Logo">
+                </div>
+                <div class="brand">
+                    <h1>Gearhead Auto Hub</h1>
+                    <p>Service Management & Repair Tracker</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="product.html" class="nav-link active">Products</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="currentRepair.html" class="nav-link">Current Repair Requests & Services</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <section class="card">
+            <h2>Available Products for Sale</h2>
+            <p class="section-desc">Browse our 10 in-stock lubricants, braking components, and maintenance parts.</p>
+            
+            <div class="items-grid">
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="Oil.avif" alt="Engine Oil">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Lubricants</span>
+                        <h3>Fully Synthetic Engine Oil (1L)</h3>
+                        <p>High-performance 10W-40 formulation engineered for cars and motorcycles.</p>
+                        <div class="price-tag">₱450.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="BrakePad.jpg" alt="Brake Pads">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Braking</span>
+                        <h3>Heavy Duty Ceramic Brake Pads</h3>
+                        <p>High thermal resistance friction pads engineered for high stopping power.</p>
+                        <div class="price-tag">₱850.00 / Set</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="Battery.jpg" alt="Battery">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Electrical</span>
+                        <h3>12V Maintenance-Free Battery</h3>
+                        <p>Heavy-duty motorcycle and automotive battery bundled with a 1-year warranty.</p>
+                        <div class="price-tag">₱2,400.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="SparkPlug.jpg" alt="Spark Plug">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Ignition</span>
+                        <h3>Iridium Power Spark Plug</h3>
+                        <p>Optimizes fuel combustion efficiency and quick cold-weather engine starts.</p>
+                        <div class="price-tag">₱320.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="Coolant.jpg" alt="Coolant">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Maintenance</span>
+                        <h3>Radiator Coolant Premix (1L)</h3>
+                        <p>Anti-boil and anti-corrosion formula designed to prevent engine overheating.</p>
+                        <div class="price-tag">₱280.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="airFilter.jpg" alt="Air Filter">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Filtration</span>
+                        <h3>High-Flow Air Filter Element</h3>
+                        <p>Washable mesh filter engineered for enhanced airflow and clean intake.</p>
+                        <div class="price-tag">₱650.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="FilterCanister.png" alt="Oil Filter">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Filtration</span>
+                        <h3>Heavy-Duty Oil Filter Canister</h3>
+                        <p>Premium micro-glass filtration media trapping microscopic debris effectively.</p>
+                        <div class="price-tag">₱250.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="wiperBlade.jpg" alt="Wiper Blades">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Accessories</span>
+                        <h3>Silicone Frameless Wiper Blade Set</h3>
+                        <p>Streak-free and durable wiping performance under torrential downpours.</p>
+                        <div class="price-tag">₱500.00 / Pair</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="gearoil.jpg" alt="Gear Oil">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Lubricants</span>
+                        <h3>Synthetic Scooter Gear Oil (120ml)</h3>
+                        <p>Protects final drive gears against high-shear wear under heavy city traffic.</p>
+                        <div class="price-tag">₱150.00</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-slot">
+                        <img src="tiresealant.jpg" alt="Tire Sealant">
+                    </div>
+                    <div class="product-info">
+                        <span class="category-tag">Emergency</span>
+                        <h3>Anti-Puncture Tubeless Tire Sealant</h3>
+                        <p>Instant puncture repair formula for tubeless motorcycle and car tires.</p>
+                        <div class="price-tag">₱380.00</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
